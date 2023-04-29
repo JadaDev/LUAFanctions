@@ -327,29 +327,6 @@ namespace LuaGlobalFunctions
      * @param uint32 entry : entry ID of the [GameObject]
      * @return ObjectGuid guid
      */
-	 
-	 int GetItemsIcon(lua_State* L, Item* item)
-    {
-        uint8 locale = Eluna::CHECKVAL<uint8>(L, 2, DEFAULT_LOCALE);
-        if (locale >= TOTAL_LOCALES)
-            return luaL_argerror(L, 2, "valid LocaleConstant expected");
-
-        const ItemTemplate* temp = eObjectMgr->GetItemTemplate(entry);
-        std::ostringstream ss;
-        ss << "|TInterface";
-        const ItemDisplayInfoEntry* dispInfo = NULL;
-        if (temp)
-        {
-            dispInfo = sItemDisplayInfoStore.LookupEntry(temp->DisplayInfoID);
-            if (dispInfo)
-                ss << "/ICONS/" << dispInfo->InventoryIcon[0];
-        }
-        if (!dispInfo)
-            ss << "/InventoryItems/WoWUnknownItem01";
-        Eluna::Push(L, ss.str());
-        return 1;
-    }
-	
     int GetObjectGUID(lua_State* L)
     {
         uint32 lowguid = Eluna::CHECKVAL<uint32>(L, 1);
@@ -451,6 +428,28 @@ namespace LuaGlobalFunctions
         return 1;
     }
 
+	int GetItemsIcon(lua_State* L)
+    {
+        uint32 entry = Eluna::CHECKVAL<uint32>(L, 1);
+		uint8 locale = Eluna::CHECKVAL<uint8>(L, 2, DEFAULT_LOCALE);
+        if (locale >= TOTAL_LOCALES)
+            return luaL_argerror(L, 2, "valid LocaleConstant expected");
+
+        const ItemTemplate* temp = eObjectMgr->GetItemTemplate(entry);
+        std::ostringstream ss;
+        ss << "|TInterface";
+        const ItemDisplayInfoEntry* dispInfo = NULL;
+        if (temp)
+        {
+            dispInfo = sItemDisplayInfoStore.LookupEntry(temp->DisplayInfoID);
+            if (dispInfo)
+                ss << "/ICONS/" << dispInfo->InventoryIcon[0];
+        }
+        if (!dispInfo)
+            ss << "/InventoryItems/WoWUnknownItem01";
+        Eluna::Push(L, ss.str());
+        return 1;
+    }
     /**
      * Returns the type ID from a GUID.
      *
