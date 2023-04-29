@@ -354,7 +354,29 @@ namespace LuaItem
         Eluna::Push(L, ss.str());
         return 1;
     }
+	
+	int GetItemsIcon(lua_State* L, Item* item)
+    {
+        uint8 locale = Eluna::CHECKVAL<uint8>(L, 2, DEFAULT_LOCALE);
+        if (locale >= TOTAL_LOCALES)
+            return luaL_argerror(L, 2, "valid LocaleConstant expected");
 
+        const ItemTemplate* temp = eObjectMgr->GetItemTemplate(entry);
+        std::ostringstream ss;
+        ss << "|TInterface";
+        const ItemDisplayInfoEntry* dispInfo = NULL;
+        if (temp)
+        {
+            dispInfo = sItemDisplayInfoStore.LookupEntry(temp->DisplayInfoID);
+            if (dispInfo)
+                ss << "/ICONS/" << dispInfo->InventoryIcon[0];
+        }
+        if (!dispInfo)
+            ss << "/InventoryItems/WoWUnknownItem01";
+        Eluna::Push(L, ss.str());
+        return 1;
+    }
+	
     int GetOwnerGUID(lua_State* L, Item* item)
     {
 #if defined TRINITY || AZEROTHCORE
