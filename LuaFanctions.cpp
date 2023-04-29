@@ -929,6 +929,7 @@ ElunaRegister<Item> ItemMethods[] =
     { "GetSpellTrigger", &LuaItem::GetSpellTrigger },
     { "GetItemLink", &LuaItem::GetItemLink },
     { "GetItemIcon", &LuaItem::GetItemIcon },
+	{ "GetItemsIcon", &LuaItem::GetItemsIcon },
     { "GetClass", &LuaItem::GetClass },
     { "GetSubClass", &LuaItem::GetSubClass },
     { "GetName", &LuaItem::GetName },
